@@ -1,80 +1,110 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 
-const resizableHOC = Child => {
-  return class Wrapper extends Component {
-    state = {
-      size: [window.innerWidth, window.innerHeight]
-    };
+const useResizable = () => {
+  const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
 
-    onResize = () => {
-      this.setState({ size: [window.innerWidth, window.innerHeight] });
-    };
-
-    componentDidMount() {
-      window.addEventListener("resize", this.onResize);
-      document.title = this.state.size.join("x");
-    }
-
-    componentDidUpdate() {
-      document.title = this.state.size.join("x");
-    }
-
-    componentWillUnmount() {
-      window.removeEventListener("resize", this.onResize);
-    }
-
-    render() {
-      const size = this.state.size;
-      return <Child size={size} />;
-    }
+  const onResize = () => {
+    setSize([window.innerWidth, window.innerHeight]);
   };
+
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  });
+
+  return [size];
 };
 
-class Resizable extends Component {
-  state = {
-    size: [window.innerWidth, window.innerHeight]
-  };
+const Foo = () => {
+  const [size] = useResizable();
 
-  onResize = () => {
-    this.setState({ size: [window.innerWidth, window.innerHeight] });
-  };
+  useEffect(() => {
+    document.title = size.join("x");
+  });
 
-  componentDidMount() {
-    window.addEventListener("resize", this.onResize);
-    document.title = this.state.size.join("x");
-  }
+  return <div>{size.join("x")}</div>;
+};
 
-  componentDidUpdate() {
-    document.title = this.state.size.join("x");
-  }
+// const resizableHOC = Child => {
+//   return class Wrapper extends Component {
+//     state = {
+//       size: [window.innerWidth, window.innerHeight]
+//     };
 
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.onResize);
-  }
+//     onResize = () => {
+//       this.setState({ size: [window.innerWidth, window.innerHeight] });
+//     };
 
-  render() {
-    return this.props.render(this.state.size);
-  }
-}
+//     componentDidMount() {
+//       window.addEventListener("resize", this.onResize);
+//       document.title = this.state.size.join("x");
+//     }
 
-class Foo extends Component {
-  render() {
-    const [width, height] = this.props.size;
-    return (
-      <div>
-        {width}x{height}
-      </div>
-    );
-  }
-}
+//     componentDidUpdate() {
+//       document.title = this.state.size.join("x");
+//     }
 
-const WrapperedFoo = resizableHOC(Foo);
+//     componentWillUnmount() {
+//       window.removeEventListener("resize", this.onResize);
+//     }
 
-class App extends Component {
-  render() {
-    // return <Resizable render={size => <Foo size={size} />} />;
-    return <WrapperedFoo />;
-  }
+//     render() {
+//       const size = this.state.size;
+//       return <Child size={size} />;
+//     }
+//   };
+// };
+
+// class Resizable extends Component {
+//   state = {
+//     size: [window.innerWidth, window.innerHeight]
+//   };
+
+//   onResize = () => {
+//     this.setState({ size: [window.innerWidth, window.innerHeight] });
+//   };
+
+//   componentDidMount() {
+//     window.addEventListener("resize", this.onResize);
+//     document.title = this.state.size.join("x");
+//   }
+
+//   componentDidUpdate() {
+//     document.title = this.state.size.join("x");
+//   }
+
+//   componentWillUnmount() {
+//     window.removeEventListener("resize", this.onResize);
+//   }
+
+//   render() {
+//     return this.props.render(this.state.size);
+//   }
+// }
+
+// class Foo extends Component {
+//   render() {
+//     const [width, height] = this.props.size;
+//     return (
+//       <div>
+//         {width}x{height}
+//       </div>
+//     );
+//   }
+// }
+
+// const WrapperedFoo = resizableHOC(Foo);
+
+// class App extends Component {
+//   render() {
+//     // return <Resizable render={size => <Foo size={size} />} />;
+//     return <WrapperedFoo />;
+//   }
+// }
+function App(props) {
+  return <Foo />;
 }
 
 export default App;
