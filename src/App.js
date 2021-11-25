@@ -1,38 +1,22 @@
-import { useState, useMemo, memo, useCallback } from "react";
-
-const Foo = memo(function Foo(props) {
-  console.log("render foo");
-
-  return <div onClick={props.onClick}>{props.double}</div>;
-});
+import { useState, useEffect, useRef } from "react";
 
 function App() {
   const [count, setCount] = useState(0);
+  const itRef = useRef();
 
-  const double = useMemo(() => {
-    return count * 2;
-  }, [count]);
-
-  const sixAndEight = useMemo(() => {
-    return count * 2;
-  }, [count === 3]);
-
-  const onClick = useCallback(() => {
-    console.log("foo click");
+  useEffect(() => {
+    itRef.current = setInterval(() => {
+      setCount(count => count + 1);
+    }, 500);
   }, []);
 
-  return (
-    <div>
-      <button
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        count:{count}, double:{double} sixAndEight:{sixAndEight}
-      </button>
-      <Foo double={sixAndEight} onClick={onClick} />
-    </div>
-  );
+  useEffect(() => {
+    if (count === 10) {
+      clearInterval(itRef.current);
+    }
+  });
+
+  return <div>{count}</div>;
 }
 
 export default App;
