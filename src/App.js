@@ -1,4 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo, useCallback } from "react";
+
+const Foo = memo(function Foo(props) {
+  console.log("render foo");
+
+  return <div onClick={props.onClick}>{props.double}</div>;
+});
 
 function App() {
   const [count, setCount] = useState(0);
@@ -11,14 +17,21 @@ function App() {
     return count * 2;
   }, [count === 3]);
 
+  const onClick = useCallback(() => {
+    console.log("foo click");
+  }, []);
+
   return (
-    <button
-      onClick={() => {
-        setCount(count + 1);
-      }}
-    >
-      count:{count}, double:{double} sixAndEight:{sixAndEight}
-    </button>
+    <div>
+      <button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        count:{count}, double:{double} sixAndEight:{sixAndEight}
+      </button>
+      <Foo double={sixAndEight} onClick={onClick} />
+    </div>
   );
 }
 
