@@ -3,21 +3,33 @@ import { createSet, createAdd, createRemove, createToggle } from "../actions";
 
 let idSeq = Date.now();
 
+function bindActionCreators(actionCreators, dispatch) {
+  const ret = {};
+
+  for (let key in actionCreators) {
+    ret[key] = (...args) => {
+      const actionCreator = actionCreators[key];
+      const action = actionCreator(...args);
+      dispatch(action);
+    };
+  }
+
+  return ret;
+}
+
 function Control(props) {
-  const { dispatch } = props;
+  const { addTodo } = props;
   const inpRef = useRef(null);
 
   const onSubmit = () => {
     const todoContent = inpRef.current.value.trim();
 
     if (!(todoContent.length === 0)) {
-      dispatch(
-        createAdd({
-          id: ++idSeq,
-          txt: todoContent,
-          complete: false
-        })
-      );
+      addTodo({
+        id: ++idSeq,
+        txt: todoContent,
+        complete: false
+      });
 
       inpRef.current.value = "";
     }
@@ -38,15 +50,16 @@ function Control(props) {
 function TodoItem(props) {
   const {
     todo: { id, txt, complete },
-    dispatch
+    removeTodo,
+    toggleTodo
   } = props;
 
   const onChange = () => {
-    dispatch(createToggle(id));
+    toggleTodo(id);
   };
 
   const onClick = () => {
-    dispatch(createRemove(id));
+    removeTodo(id);
   };
 
   return (
@@ -61,11 +74,11 @@ function TodoItem(props) {
 }
 
 function Todos(props) {
-  const { todos, dispatch } = props;
+  const { todos, removeTodo, toggleTodo } = props;
   return (
     <ul>
       {todos.map(v => (
-        <TodoItem key={v.id} todo={v} dispatch={dispatch} />
+        <TodoItem key={v.id} todo={v} removeTodo={removeTodo} toggleTodo={toggleTodo} />
       ))}
     </ul>
   );
@@ -118,8 +131,24 @@ export function TodoList() {
 
   return (
     <main className="todo-list">
-      <Control dispatch={dispatch} />
-      <Todos todos={todos} dispatch={dispatch} />
+      <Control
+        {...bindActionCreators(
+          {
+            addTodo: createAdd
+          },
+          dispatch
+        )}
+      />
+      <Todos
+        todos={todos}
+        {...bindActionCreators(
+          {
+            removeTodo: createRemove,
+            toggleTodo: createToggle
+          },
+          dispatch
+        )}
+      />
     </main>
   );
 }
