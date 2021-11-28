@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
+import { createSet, createAdd, createRemove, createToggle } from "../actions";
 
 let idSeq = Date.now();
 
@@ -10,14 +11,13 @@ function Control(props) {
     const todoContent = inpRef.current.value.trim();
 
     if (!(todoContent.length === 0)) {
-      dispatch({
-        type: "add",
-        payload: {
+      dispatch(
+        createAdd({
           id: ++idSeq,
           txt: todoContent,
           complete: false
-        }
-      });
+        })
+      );
 
       inpRef.current.value = "";
     }
@@ -42,11 +42,11 @@ function TodoItem(props) {
   } = props;
 
   const onChange = () => {
-    dispatch({ type: "toggle", payload: id });
+    dispatch(createToggle(id));
   };
 
   const onClick = () => {
-    dispatch({ type: "remove", payload: id });
+    dispatch(createRemove(id));
   };
 
   return (
@@ -75,27 +75,6 @@ const LS_TODOS = "!$#$_todos_@!serfgo84";
 
 export function TodoList() {
   const [todos, setTodos] = useState([]);
-
-  //   const addTodo = useCallback(todo => {
-  //     setTodos(todos => [...todos, todo]);
-  //   }, []);
-
-  //   const removeTodo = useCallback(id => {
-  //     setTodos(todos => todos.filter(v => v.id !== id));
-  //   }, []);
-
-  //   const toggleTodo = useCallback(id => {
-  //     setTodos(todos =>
-  //       todos.map(v => {
-  //         return v.id === id
-  //           ? {
-  //               ...v,
-  //               complete: !v.complete
-  //             }
-  //           : v;
-  //       })
-  //     );
-  //   }, []);
 
   const dispatch = useCallback(action => {
     const { type, payload } = action;
@@ -130,10 +109,7 @@ export function TodoList() {
 
   useEffect(() => {
     const todos = JSON.parse(localStorage.getItem(LS_TODOS) || "[]");
-    dispatch({
-      type: "set",
-      payload: todos
-    });
+    dispatch(createSet(todos));
   }, []);
 
   useEffect(() => {
