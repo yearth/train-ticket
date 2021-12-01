@@ -20,7 +20,11 @@ function App() {
 
 export default connect(
   // mapStateToProps
-  state => {},
+  state => {
+    return {};
+  },
   // mapDispatchToProps
-  dispatch => {}
+  dispatch => {
+    return {};
+  }
 )(App);

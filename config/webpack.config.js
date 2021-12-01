@@ -162,18 +162,22 @@ module.exports = function (webpackEnv) {
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: {
-      home: [paths.appIndexJs, isEnvDevelopment && require.resolve("react-dev-utils")].filter(
-        Boolean
-      ),
-      query: [paths.appQueryJs, isEnvDevelopment && require.resolve("react-dev-utils")].filter(
-        Boolean
-      ),
-      ticket: [paths.appTicketJs, isEnvDevelopment && require.resolve("react-dev-utils")].filter(
-        Boolean
-      ),
-      order: [paths.appOrderJs, isEnvDevelopment && require.resolve("react-dev-utils")].filter(
-        Boolean
-      )
+      home: [
+        isEnvDevelopment && require.resolve("react-dev-utils/webpackHotDevClient"),
+        paths.appIndexJs
+      ].filter(Boolean),
+      query: [
+        isEnvDevelopment && require.resolve("react-dev-utils/webpackHotDevClient"),
+        paths.appQueryJs
+      ].filter(Boolean),
+      ticket: [
+        isEnvDevelopment && require.resolve("react-dev-utils/webpackHotDevClient"),
+        paths.appTicketJs
+      ].filter(Boolean),
+      order: [
+        isEnvDevelopment && require.resolve("react-dev-utils/webpackHotDevClient"),
+        paths.appOrderJs
+      ].filter(Boolean)
     },
     // isEnvDevelopment && !shouldUseReactRefresh
     //   ? [
