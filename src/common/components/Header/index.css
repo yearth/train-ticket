@@ -1,0 +1,15 @@
+.header {
+  background: deepskyblue;
+  display: flex;
+}
+
+.header .header-back {
+  display: flex;
+  align-items: center;
+}
+
+.header .header-title {
+  flex: 1;
+  text-align: center;
+  margin-left: -42px;
+}
