@@ -1,0 +1,14 @@
+.journey {
+  display: flex;
+  justify-content: space-between;
+}
+
+.journey-switch {
+  padding: 0 16px;
+}
+
+.journey-station,
+.journey-station input {
+  flex: 1;
+  width: 100%;
+}
