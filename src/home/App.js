@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import Header from "../common/components/Header";
+import CitySelector from "../common/components/CitySelector";
 import DepartDate from "./components/DepartDate";
 import HighSpeed from "./components/HighSpeed";
 import Journey from "./components/Journey";
@@ -9,7 +10,7 @@ import Submit from "./components/Submit";
 import { showCitySelector, exchangeFromTo } from "./actions";
 
 function App(props) {
-  const { from, to, dispatch } = props;
+  const { from, to, dispatch, isCitySelectorVisible, cityData, isLoadingCityData } = props;
 
   const onBack = useCallback(() => {
     window.history.back();
@@ -48,6 +49,7 @@ function App(props) {
         <HighSpeed />
         <Submit />
       </form>
+      <CitySelector show={isCitySelectorVisible} loading={isLoadingCityData} data={cityData} />
     </main>
   );
 }

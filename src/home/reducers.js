@@ -35,6 +35,7 @@ const reducer = {
         return payload;
       default:
     }
+
     return state;
   },
   currentSelectingLeftCity(state = false, action) {
