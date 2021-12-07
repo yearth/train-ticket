@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import classnames from "classnames";
 import "./index.css";
 
 export default function CitySelector(props) {
-  const { show, loading, data } = props;
+  const { show, loading, data, onBack } = props;
 
   const [value, setValue] = useState("");
+  const pureValue = useMemo(() => value.trim(), [value]);
 
   return (
     <div
@@ -14,7 +15,7 @@ export default function CitySelector(props) {
       })}
     >
       <div className="city-search">
-        <div className="city-back">
+        <div className="city-back" onClick={() => onBack()}>
           <svg width="42" height="42">
             <polyline points="25,13 16,21 25,29" stroke="#fff" strokeWidth="2" fill="none" />
           </svg>
@@ -30,8 +31,9 @@ export default function CitySelector(props) {
           />
           <span
             className={classnames("search-clean", {
-              hidden: value.length === 0
+              hidden: pureValue.length === 0
             })}
+            onClick={() => setValue("")}
           >
             x
           </span>

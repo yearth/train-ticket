@@ -7,7 +7,7 @@ import DepartDate from "./components/DepartDate";
 import HighSpeed from "./components/HighSpeed";
 import Journey from "./components/Journey";
 import Submit from "./components/Submit";
-import { showCitySelector, exchangeFromTo } from "./actions";
+import { showCitySelector, exchangeFromTo, hideCitySelector } from "./actions";
 
 function App(props) {
   const { from, to, dispatch, isCitySelectorVisible, cityData, isLoadingCityData } = props;
@@ -24,11 +24,22 @@ function App(props) {
   // dispatch(showCitySelector(m));
   // }, []);
 
-  const dispatchs = useMemo(() => {
+  const journeyCbs = useMemo(() => {
     return bindActionCreators(
       {
         exchangeFromTo,
         showCitySelector
+      },
+      dispatch
+    );
+  }, []);
+
+  const citySelectorCbs = useMemo(() => {
+    console.log("hideCitySelector", hideCitySelector);
+
+    return bindActionCreators(
+      {
+        onBack: hideCitySelector
       },
       dispatch
     );
@@ -41,7 +52,7 @@ function App(props) {
         <Journey
           from={from}
           to={to}
-          {...dispatchs}
+          {...journeyCbs}
           // exchangeFromTo={doExchangeFromTo}
           // showCitySelector={doShowCitySelector}
         />
@@ -49,7 +60,12 @@ function App(props) {
         <HighSpeed />
         <Submit />
       </form>
-      <CitySelector show={isCitySelectorVisible} loading={isLoadingCityData} data={cityData} />
+      <CitySelector
+        show={isCitySelectorVisible}
+        loading={isLoadingCityData}
+        data={cityData}
+        {...citySelectorCbs}
+      />
     </main>
   );
 }
