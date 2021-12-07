@@ -35,8 +35,6 @@ function App(props) {
   }, []);
 
   const citySelectorCbs = useMemo(() => {
-    console.log("hideCitySelector", hideCitySelector);
-
     return bindActionCreators(
       {
         onBack: hideCitySelector
