@@ -16,3 +16,20 @@
   display: flex;
   align-items: center;
 }
+
+.search-input-wrapper,
+.search-input-wrapper input {
+  width: 100%;
+  margin-right: 16px;
+}
+
+.search-input-wrapper {
+  position: relative;
+}
+
+.search-input-wrapper .search-clean {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
