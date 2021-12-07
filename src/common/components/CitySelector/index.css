@@ -4,9 +4,15 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: #000;
 }
 
 .hidden {
   display: none;
+}
+
+.city-search {
+  background: deepskyblue;
+  height: 80px;
+  display: flex;
+  align-items: center;
 }
