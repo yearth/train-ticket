@@ -4,11 +4,12 @@
 }
 
 .journey-switch {
-  padding: 0 16px;
+  padding: 0 8px;
 }
 
 .journey-station,
 .journey-station input {
   flex: 1;
+  box-sizing: border-box;
   width: 100%;
 }
